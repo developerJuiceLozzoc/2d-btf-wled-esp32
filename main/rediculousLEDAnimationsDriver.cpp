@@ -46,17 +46,18 @@
 #define numPurpleColors 5
 #define numGreenColors 5
 #define numRainColors 5
+#define numberBeforeSurpise = 1
 
 
 static WS2812 *oWS2812;
 
 enum class AnimationShouldStartState {
+	DickAnimation,
 	HappyThursday,
     CozyTransitionWave,
     DNAPurpleGreenWavy,
     Rainy,
     PurpleCrazyWave,
-    DickAnimation,
     None
 };
 
@@ -200,93 +201,103 @@ void setRainColorForIndex(uint16_t * color, int index) {
 }
 
 /**
- * @brief Return an index associated with row and column.
- *
- * every other column is flipped so the row needs to be inverted in such a fashion
- * than added up in another fashion and finally returned as a lump sum.
+ * @brief Display a charcater that spans column...column+3
  *
 
- * @param [in] row ranges from 0-7 and is the height
- * @param [in] col 0 - 32 and is the how far left right
+ * @param [in] character one of a set that is curated below ranges from 0-7 and is the height
+ * @param [in] column the offset. the 4 colummns that make a letter span from here to the right.(not to the right col...col+3)
+ * this looks weird if you flip the LED upside down.
  */
  void setCharacterAtPosition(
 	 char character,
-	 uint8_t column
+	 uint8_t column,
+	 bool shouldAnimateFunny
 ) {
 	int index = 0;
-	uint16_t constructionOrange[3] = {30, 200, 150};  // HSB for Dark Ginger Orange
+	uint16_t charColor[3]; 
+	switch (character) {
+		case '=':
+		case 'D':
+		case '8':
+			charColor[0] = 290;
+			charColor[1] = 255;
+			charColor[2] = 6;
+			break;
+		default:
+			charColor[0] = 30;
+			charColor[1] = 200;
+			charColor[2] = 15;
+			break;		
+	}
 	 switch (character) {
-		 default:
-		 	break;
 		 case 'H':
 		 	for(int i=0;i<6;i++){
 				 if(column >= numColumns){
 					 continue;
 				 }
 				 index = adjustedIndexForRowAndColumn(1 + i, column);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 if(column+3 >= numColumns){
 					 continue;
 				 }
 				 index = adjustedIndexForRowAndColumn(1 + i, column + 3);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 if (column+1 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(3, column+1);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 if (column+2 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(3, column+2);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
-			 }
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 		 	break;
 		 case 'A':
 			 for(int i = 0; i < 4; i ++) {
 				 if(column < numColumns) {
 					  index = adjustedIndexForRowAndColumn(i+3, column);
-					 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 }
 				 if(column + 3 < numColumns) {
 					  index = adjustedIndexForRowAndColumn(i+3, column + 3);
-					 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 }
 			 }
 			 for(int i = 0; i < 2; i ++) {
 				 if(column + 1 + i < numColumns) {
 					  index = adjustedIndexForRowAndColumn(4, column+1+i);
-					 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 }
 			 }
 			 if(column+1 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(2, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			  if(column+2 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(2, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 index = adjustedIndexForRowAndColumn(1, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 break;
 		 case 'P':
 		 	if(column < numColumns) {
 				 for(int row = 0; row < 6; row++) {
 					index = adjustedIndexForRowAndColumn(row+1, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				 }
 			 }
 			 for(int col = 1; col < 3; col++) {
 				if(column + col < numColumns) {
 					index = adjustedIndexForRowAndColumn(1, column+col);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 					index = adjustedIndexForRowAndColumn(4, column+col);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				}
 			}
 			if (column+3 < numColumns) {
 				for(int row = 2;  row < 4; row++) {
 					index = adjustedIndexForRowAndColumn(row, column+3);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				}
 			}
 			 break;
@@ -294,48 +305,48 @@ void setRainColorForIndex(uint16_t * color, int index) {
 			 for(int row = 1; row < 3; row++) {
 				if (column < numColumns) {
 					index = adjustedIndexForRowAndColumn(row, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				}
 				
 				if (column+3 < numColumns) {
 					index = adjustedIndexForRowAndColumn(row, column+3);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				}
 			}
 			 if (column < numColumns) {
 				index = adjustedIndexForRowAndColumn(numRows-2, column);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			}
 			
 			
 			if (column+1 < numColumns) {
 				index = adjustedIndexForRowAndColumn(3, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(5, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			}
 			if (column+2 < numColumns) {
 				index = adjustedIndexForRowAndColumn(3, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(4, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			}
 			 break;
 		 case 'T':
 			 for(int col=0; col< 2;col++){
 				 if ((column + col*3) < numColumns) {
 					index = adjustedIndexForRowAndColumn(1, column+ col*3);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 }
 			  for(int row=0; row< 6;row++){
 				 if (column+1 < numColumns) {
 					index = adjustedIndexForRowAndColumn(1+row, column+1);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 				 if (column+2 < numColumns) {
 					index = adjustedIndexForRowAndColumn(1+row, column+2);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 }
 			 break;
@@ -343,104 +354,104 @@ void setRainColorForIndex(uint16_t * color, int index) {
 		 	 for(int row=0; row< 5;row++){
 				 if (column < numColumns) {
 					index = adjustedIndexForRowAndColumn(1+row, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 				 if (column+3 < numColumns) {
 					index = adjustedIndexForRowAndColumn(1+row, column+3);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 }
 			 if (column+1 < numColumns) {
 				index = adjustedIndexForRowAndColumn(numRows-2, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 if (column+2 < numColumns) {
 				index = adjustedIndexForRowAndColumn(numRows-2, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 break;
 		 case 'R':
 		 	 for(int row=0; row< 6;row++){
 				 if (column < numColumns) {
 					index = adjustedIndexForRowAndColumn(1+row, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 }
 			 if (column+1 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(4, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 if (column+2 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(4, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				index = adjustedIndexForRowAndColumn(5, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 if (column+3 < numColumns) {
 				index = adjustedIndexForRowAndColumn(2, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(3, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				index = adjustedIndexForRowAndColumn(6, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 		 	break;
 		 case 'S':
 			  if (column < numColumns) {
 					index = adjustedIndexForRowAndColumn(2, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 					index = adjustedIndexForRowAndColumn(3, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 					index = adjustedIndexForRowAndColumn(numRows - 2, column);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 if (column+1 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(3, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				index = adjustedIndexForRowAndColumn(6, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 if (column+2 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(4, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				index = adjustedIndexForRowAndColumn(6, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 if (column+3 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(4, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				index = adjustedIndexForRowAndColumn(5, column+3);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 break;
 		 case '!':
 			 for(int row = 0; row < 4; row++){
 				 if(column + 1 < numColumns) {
 					 index = adjustedIndexForRowAndColumn(1+row, column+1);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 				  if(column + 2 < numColumns) {
 					 index = adjustedIndexForRowAndColumn(1+row, column+2);
-					oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+					oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 				 }
 			 }
 		  	if(column + 1 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(numRows - 2, column+1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			  if(column + 2 < numColumns) {
 				 index = adjustedIndexForRowAndColumn(numRows - 2, column+2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]); 
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]); 
 			 }
 			 break;
 		 case 'D':
@@ -449,24 +460,24 @@ void setRainColorForIndex(uint16_t * color, int index) {
 					 continue;
 				 }
 				 index = adjustedIndexForRowAndColumn(1 + i, column);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 if(column + 1 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column + 1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(numRows - 2, column + 1);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 if(column + 2 < numColumns) {
 				index = adjustedIndexForRowAndColumn(1, column + 2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 				index = adjustedIndexForRowAndColumn(numRows - 2, column + 2);
-				oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 if(column + 3 < numColumns) {
 				for(int i=0;i<4;i++){
 				 index = adjustedIndexForRowAndColumn(2 + i, column+3);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 	}
 			 }
 			 break;
@@ -475,14 +486,21 @@ void setRainColorForIndex(uint16_t * color, int index) {
 				 if(i+column >= numColumns){
 					 continue;
 				 }
-				 index = adjustedIndexForRowAndColumn(1, i+column);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
-				 index = adjustedIndexForRowAndColumn(numRows - 2, i+column);
-				 oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+				 index = adjustedIndexForRowAndColumn(2, i+column);
+				 if(shouldAnimateFunny) {
+					index = adjustedIndexForRowAndColumn(1, i+column);
+				 }
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
+				 
+				 index = adjustedIndexForRowAndColumn(numRows - 3, i+column);
+				 if(shouldAnimateFunny) {
+					 index = adjustedIndexForRowAndColumn(numRows - 2, i + column);
+				 }
+				 oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 			 }
 			 break;
 		 case '8':
-			 bool shouldSwapDick = rand() % 2;
+			 shouldAnimateFunny = rand() % 2;
 		 	for(int col	= 0; col < 4; col++){
 				if(col+column >= numColumns){
 					 continue;
@@ -491,16 +509,16 @@ void setRainColorForIndex(uint16_t * color, int index) {
 					case 1:
 					case 2:
 						index = adjustedIndexForRowAndColumn(0, col+column);
-						oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+						oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 						index = adjustedIndexForRowAndColumn(numRows - 1, col+column);
-						oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+						oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 						
-						if(shouldSwapDick) {
+						if(shouldAnimateFunny) {
 							index = adjustedIndexForRowAndColumn(4, col+column);
-						oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+						oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 						} else {
 							index = adjustedIndexForRowAndColumn(3, col+column);
-						oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+						oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 						}
 						
 						break;
@@ -508,7 +526,7 @@ void setRainColorForIndex(uint16_t * color, int index) {
 					case 0:
 						for(int row = 0; row < numRows; row++) {
 							index = adjustedIndexForRowAndColumn(row, col+column);
-							oWS2812->setHSBPixel(index, constructionOrange[0], constructionOrange[1], constructionOrange[2]);
+							oWS2812->setHSBPixel(index, charColor[0], charColor[1], charColor[2]);
 						}
 						index = adjustedIndexForRowAndColumn(4, col+column);
 						oWS2812->setHSBPixel(index, 0, 0, 0);
@@ -518,8 +536,13 @@ void setRainColorForIndex(uint16_t * color, int index) {
 				}	 
 			}
 			break;
+		 default:
+		 	break;
 	 }
+ 	}
  }
+
+
 
 // Define an inline function
 inline void setNextState(AnimationShouldStartState *state, int nextState, uint32_t *clicks) {
@@ -529,11 +552,11 @@ inline void setNextState(AnimationShouldStartState *state, int nextState, uint32
 	*state = static_cast<AnimationShouldStartState>(nextState);
 }
 
-
 void stateMachineForAnimationStateAndCurrentClicks(
 	AnimationShouldStartState* state,
 	uint32_t* clicks,
-	bool* shouldKickOffAscii
+	bool* shouldKickOffAscii,
+	uint8_t* surpriseClicks
 ) {
 	bool shouldEndRegularily = false;
 	switch(*state) {	
@@ -541,9 +564,10 @@ void stateMachineForAnimationStateAndCurrentClicks(
 			setNextState(state, static_cast<int>(AnimationShouldStartState::HappyThursday), clicks);
 			break;
         case AnimationShouldStartState::HappyThursday:
-			shouldEndRegularily = *clicks == 100;
+			shouldEndRegularily = *clicks == 130;
 			if(shouldEndRegularily) {
 				*shouldKickOffAscii = true;
+				*surpriseClicks += 1;
 			}
         	break;
         case AnimationShouldStartState::DickAnimation:
@@ -566,7 +590,12 @@ void stateMachineForAnimationStateAndCurrentClicks(
     }
     
     if(shouldEndRegularily) {
-		setNextState(state, static_cast<int>(*state) + 1, clicks);
+		if(*surpriseClicks == 3) {
+			*surpriseClicks = 0;
+			setNextState(state, static_cast<int>(AnimationShouldStartState::DickAnimation), clicks);
+		} else {
+			setNextState(state, static_cast<int>(*state) + 1, clicks);
+		}
 	}
 
 }
@@ -715,10 +744,12 @@ bool colorIndexSwitcher(ColorState* state) {
 			break;
         case MyColorType::Green:
             shouldEnd = (state->index + 1 == numGreenColors);
-            state->index = (state->index + 1) % numGreenColors;
+             state->index = (state->index + 1) % numGreenColors;
 			break;
         case MyColorType::CloseToBlack:
-                return true;
+	         state->index += 1;
+	         shouldEnd = state->index == 1;
+	         break;
         }
        return shouldEnd;
 }
@@ -744,6 +775,9 @@ void updateColorArrForEnum(
 			setRainColorForIndex(currentSinWaveColors[*numberColumnsTransitioned], colorState->index);
 			break;
 		default:
+			currentSinWaveColors[*numberColumnsTransitioned][0] = 45;
+			currentSinWaveColors[*numberColumnsTransitioned][1] = 45;
+			currentSinWaveColors[*numberColumnsTransitioned][2] = 45;
 			break;
 	}
 }
@@ -808,27 +842,33 @@ bool transitionIfColumnsReached(
 
 void animateDickForOffset(uint16_t offset){
 	oWS2812->clear();
+	bool shouldWobble = (rand() % 15);
 	setCharacterAtPosition(
 		'D',
-		offset	
+		offset,
+		false
 	);
 	setCharacterAtPosition(
 		'=',
-		offset - 6	
+		offset - 6,
+		shouldWobble	
 	);
 	setCharacterAtPosition(
 		'=',
-		offset - 12	
+		offset - 12,
+		shouldWobble
 	);
+	shouldWobble = rand() % 2;
 	setCharacterAtPosition(
 		'8',
-		offset - 18	
+		offset - 18,
+		shouldWobble
 	);
 	oWS2812->show();
 }
 
 void animateThursdayForOffset(uint16_t offset){
-	int const len = 14;
+	int const len = 16;
 	char sentence[] = {
 		'H',
 		'A',
@@ -843,13 +883,16 @@ void animateThursdayForOffset(uint16_t offset){
 		'D',
 		'A',
 		'Y',
-		'!'
+		'!',
+		'=',
+		'D'
 	};
 	oWS2812->clear();
 	for(int i = len - 1; i >= 0; i--) {
 		setCharacterAtPosition(
 			sentence[i],
-			offset - 6*(len - i)
+			offset - 6*(len - i),
+			(rand()%20) == 0
 		);
 	}
 	oWS2812->show();
@@ -870,6 +913,7 @@ void ws2812_task() {
 	uint16_t relativeOffsetForColorTransition = 0;
 	uint16_t relativeOffsetForCharacters = 0;
 	uint16_t colorArrForOneWave[numColumns][3];
+	uint8_t shouldSurpriseUser = 0;
 /*  
 i would like to have 24 ticks per second. to achieve this
 	24 ticks * 1 second
@@ -884,7 +928,7 @@ i would like to have 24 ticks per second. to achieve this
 /*===================================*/
 /* main run loop */
 	while(1) {
-		stateMachineForAnimationStateAndCurrentClicks(&state, &stateMachineTicks, &animationBeginningToggle);
+		stateMachineForAnimationStateAndCurrentClicks(&state, &stateMachineTicks, &animationBeginningToggle, &shouldSurpriseUser);
 		if(animationBeginningToggle) {
 			relativeOffsetForCharacters = 0;
 			animationBeginningToggle = false;
@@ -896,7 +940,7 @@ i would like to have 24 ticks per second. to achieve this
 				// this will have a seperate tick
 				break;
             case AnimationShouldStartState::HappyThursday:
-            	animateThursdayForOffset(6*13 + numColumns - relativeOffsetForCharacters);
+            	animateThursdayForOffset(6*17 + numColumns - relativeOffsetForCharacters);
             	relativeOffsetForCharacters += 1;
             	break;
 			case AnimationShouldStartState::Rainy:
