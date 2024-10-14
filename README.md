@@ -28,6 +28,15 @@ To run this project, you must install the following:
 
 Once uploaded, the project should run fine, and the LED animations will start on your 256 LED matrix.
 
+## Photo Gallery
+
+| ![Photo 1](./media/photo1.png) | ![Photo 2](./media/photo2.png) | ![Photo 3](./media/photo3.png) |
+|:------------------------------:|:------------------------------:|:------------------------------:|
+| ![Photo 4](./media/photo4.png) | ![Photo 5](./media/photo5.png) | ![Photo 6](./media/photo6.png) |
+| ![Photo 7](./media/photo7.png) |                                | ![Photo 9](./media/photo9.png) |
+
+
+
 ## Attachments
 ## Attachments
 
