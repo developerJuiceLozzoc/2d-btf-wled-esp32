@@ -29,8 +29,9 @@ To run this project, you must install the following:
 Once uploaded, the project should run fine, and the LED animations will start on your 256 LED matrix.
 
 ## Attachments
+## Attachments
 
-Make sure to refer to the attached PDF file, **"8x32 2812 c project.pdf"**, for additional documentation and details on the implementation.
+Make sure to refer to the attached PDF file, [**8x32 2812 c project.pdf**](8x32%202812%20c%20project.pdf), for additional documentation and details on the implementation.
 
 ## License
 
