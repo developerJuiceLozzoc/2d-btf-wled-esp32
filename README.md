@@ -1,53 +1,37 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C5 | ESP32-C6 | ESP32-C61 | ESP32-H2 | ESP32-P4 | ESP32-S2 | ESP32-S3 | Linux |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | --------- | -------- | -------- | -------- | -------- | ----- |
+# Happy Thursday LED 2D WS2812 ESP32
 
-# Hello World Example
+This project powers a 256 individually addressable 2D LED board wrapped in a snake-like matrix using an ESP32. The project features 3 or 4 distinct animations written in C++, with one of the animations being ASCII art, where rows and columns of ASCII characters are translated into 4x6 bit LED pixels on the board, which is indexed from 0 to 255.
 
-Starts a FreeRTOS task to print "Hello World".
+## Features
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+- **Individually Addressable LEDs**: Control 256 WS2812 LEDs in a 2D matrix.
+- **Snake-like Matrix Layout**: The LED board is wrapped in a snake pattern for unique display.
+- **Custom Animations**: 3-4 C++ animations, including:
+  - **ASCII Art Animation**: Converts 4x6 pixel ASCII characters into LED displays.
 
-## How to use example
+## Requirements
 
-Follow detailed instructions provided specifically for this example.
+To run this project, you must install the following:
 
-Select the instructions depending on Espressif chip installed on your development board:
+- **Espressif IDE**: This project runs on the ESP32 microcontroller, and Espressif's IDE is required for building and uploading the code.
+  
+## Getting Started
 
-- [ESP32 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/index.html)
-- [ESP32-S2 Getting Started Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/index.html)
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/happy-thursday-led-2d-ws2812-esp32.git
+    ```
 
+2. Open the project in Espressif IDE.
 
-## Example folder contents
+3. Compile and upload the code to your ESP32.
 
-The project **hello_world** contains one source file in C language [hello_world_main.c](main/hello_world_main.c). The file is located in folder [main](main).
+Once uploaded, the project should run fine, and the LED animations will start on your 256 LED matrix.
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both).
+## Attachments
 
-Below is short explanation of remaining files in the project folder.
+Make sure to refer to the attached PDF file, **"8x32 2812 c project.pdf"**, for additional documentation and details on the implementation.
 
-```
-├── CMakeLists.txt
-├── pytest_hello_world.py      Python script used for automated testing
-├── main
-│   ├── CMakeLists.txt
-│   └── hello_world_main.c
-└── README.md                  This is the file you are currently reading
-```
+## License
 
-For more information on structure and contents of ESP-IDF projects, please refer to Section [Build System](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/build-system.html) of the ESP-IDF Programming Guide.
-
-## Troubleshooting
-
-* Program upload failure
-
-    * Hardware connection is not correct: run `idf.py -p PORT monitor`, and reboot your board to see if there are any output logs.
-    * The baud rate for downloading is too high: lower your baud rate in the `menuconfig` menu, and try again.
-
-## Technical support and feedback
-
-Please use the following feedback channels:
-
-* For technical queries, go to the [esp32.com](https://esp32.com/) forum
-* For a feature request or bug report, create a [GitHub issue](https://github.com/espressif/esp-idf/issues)
-
-We will get back to you as soon as possible.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
